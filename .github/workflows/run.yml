@@ -2,7 +2,7 @@ name: Stoplight scraper
 
 on:
   schedule:
-    - cron:  50 13 * * *
+    - cron:  53 13 * * *
 
 jobs:
   scheduled:
