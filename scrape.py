@@ -77,12 +77,10 @@ def scrape(b):
     
     data['tx_flmshelter_sheltermap[term]'] = terms[b]
     r = requests.post(urls[b], params=payload, data=data)
-    text = r.text.replace('<br />','')
-    soup = BeautifulSoup(text, 'lxml')
+    soup = BeautifulSoup(r.text, 'lxml')
     script = soup.find('script')
-    return(r.status_code)
     ctx = py_mini_racer.MiniRacer()
-    raw_dict = ctx.eval(script.text + ' shelterMap;')
+    raw_dict = ctx.eval(script.string + ' shelterMap;')
     data_dict = [{k : d[k] for k in ['name','free-women','free-children','free-places']} for d in raw_dict]
     for item in data_dict:
 
@@ -118,9 +116,8 @@ def update(b):
 def main():
 
     for b in urls.keys():
-        r = scrape(b)
-        print(r)
-        # update(b)
+        update(b)
 
 if __name__=='__main__':
     main()
+    
