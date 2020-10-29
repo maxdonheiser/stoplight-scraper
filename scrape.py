@@ -56,15 +56,15 @@ def scrape_mv(url):
 
     for item in l:
 
-    	fp = 0
-    	if row[1] == 'x':
-    		fp = 1
+        fp = 0
+        if row[1] == 'x':
+            fp = 1
 
-    	d = {'name' : item[0],
-    		'free-places' : fp,
-    		'date' : date.today()}
+        d = {'name' : item[0],
+            'free-places' : fp,
+            'date' : date.today()}
 
-    	data_dict.append(d)
+        data_dict.append(d)
     
     return data_dict
 
@@ -78,48 +78,49 @@ def scrape(b):
     data['tx_flmshelter_sheltermap[term]'] = terms[b]
     r = requests.post(urls[b], params=payload, data=data)
     text = r.text.replace('<br />','')
-    soup = BeautifulSoup(r.text.replace('<br />',''), 'lxml')
+    soup = BeautifulSoup(text, 'lxml')
     script = soup.find('script')
+    return(r.status_code)
     ctx = py_mini_racer.MiniRacer()
-
-    raw_dict = ctx.eval(script.text + 'shelterMap;')
+    raw_dict = ctx.eval(script.text + ' shelterMap;')
     data_dict = [{k : d[k] for k in ['name','free-women','free-children','free-places']} for d in raw_dict]
     for item in data_dict:
 
-    	fp = item['free-places']
-    	fp = re.search('(?<=title\=\").*(?=\" src)',fp).group(0)
-    	item['free-places'] = fp
-    	item['date'] = date.today()
+        fp = item['free-places']
+        fp = re.search('(?<=title\=\").*(?=\" src)',fp).group(0)
+        item['free-places'] = fp
+        item['date'] = date.today()
 
-    print(data_dict)
     return data_dict
 
 def update(b):
 
-	d = scrape(b)
+    d = scrape(b)
 
-	fpath = './data/' + b + '.csv'
+    fpath = './data/' + b + '.csv'
 
-	if os.path.exists(fpath):
+    if os.path.exists(fpath):
 
-		f = open(fpath, 'a', encoding='utf8')
-		keys = d[0].keys()
-		writer = csv.DictWriter(f, fieldnames=keys)
+        f = open(fpath, 'a', encoding='utf8')
+        keys = d[0].keys()
+        writer = csv.DictWriter(f, fieldnames=keys)
 
-	else:
+    else:
 
-		f = open(fpath, 'w', encoding='utf8')
-		keys = d[0].keys()
-		writer = csv.DictWriter(f, fieldnames=keys)
-		writer.writeheader()
+        f = open(fpath, 'w', encoding='utf8')
+        keys = d[0].keys()
+        writer = csv.DictWriter(f, fieldnames=keys)
+        writer.writeheader()
 
-	writer.writerows(d)
-	f.close()
+    writer.writerows(d)
+    f.close()
 
 def main():
 
-	for b in urls.keys():
-		update(b)
+    for b in urls.keys():
+        r = scrape(b)
+        print(r)
+        # update(b)
 
 if __name__=='__main__':
-	main()
+    main()
