@@ -1,9 +1,8 @@
 name: Stoplight scraper
 
 on:
-  push:  
   schedule:
-    - cron:  '22 12 * * *'
+    - cron:  '29 13 * * *'
 
 jobs:
   build:
