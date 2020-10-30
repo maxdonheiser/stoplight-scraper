@@ -46,18 +46,18 @@ def scrape_mv(url):
     r = requests.get(url)
     soup = BeautifulSoup(r.text, 'lxml')
     rows = soup.find('table').find_all('tr')
-    l = []
+    raw_dict = []
     for tr in rows:
         td = tr.find_all('td')
         row = [tr.text.replace('\n','').replace('\xa0','').strip().lower() for tr in td]
-        l.append(row)
+        raw_dict.append(row)
 
     data_dict = []
 
-    for item in l:
+    for item in raw_dict[1:]:
 
         fp = 0
-        if row[1] == 'x':
+        if item[1] == 'x':
             fp = 1
 
         d = {'name' : item[0],
