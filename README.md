@@ -1,3 +1,3 @@
 # stoplight-scraper
 
-Scrape free-space data at Frauenhäuser throughout Germany.
+Freie-plätze in Frauenhäuser in Deutschland.
