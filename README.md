@@ -1,3 +1,3 @@
 # stoplight-scraper
 
-Freie-plätze in Frauenhäuser in Deutschland.
+Daten über freie Plätze in Frauenhäusern in Deutschland.
